@@ -28,13 +28,15 @@ keyboardRows.forEach(row => {
             key.classList.add("key")
             key.innerText = kbThirdRow[i]
             row.appendChild(key)
+            if (kbThirdRow[i] === "ENTER") {
+                key.classList.add("special-key")
+            }
         }
         // backspace key
         const key = document.createElement("div")
-        key.classList.add("key")
+        key.classList.add("key", "special-key")
         const backspace = document.createElement("i")
-        backspace.classList.add("fa-solid")
-        backspace.classList.add("fa-delete-left")
+        backspace.classList.add("fa-solid", "fa-delete-left")
         key.appendChild(backspace)
         row.appendChild(key)
     }
