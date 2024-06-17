@@ -46,12 +46,6 @@ keyboardRows.forEach(row => {
 
 const guesses = document.querySelectorAll(".guess")
 
-guesses.forEach(guess => {
-    for (let i = 0; i < 5; i++) {
-        
-    }
-})
-
 // generate guess rows
 for (let i = 0; i < guesses.length; i++) {
     for (let j = 0; j < 5; j++) {
