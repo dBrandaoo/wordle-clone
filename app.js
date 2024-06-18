@@ -68,7 +68,6 @@ keyboardRows.forEach(row => {
     }
 })
 
-
 const guesses = document.querySelectorAll(".guess")
 
 // generate guess rows
@@ -83,18 +82,20 @@ for (let i = 0; i < guesses.length; i++) {
 
 
 let secretWord = wordList[Math.floor(Math.random() * wordList.length)].toLowerCase()
+console.log("Secret word: ", secretWord)
 
 let guessIndex = 0
 let playerGuess = []
-let currGuess = document.getElementById("g-0")
+let currGuess = document.getElementById(`g-${guessIndex}`)
 let currGuessLetters = currGuess.querySelectorAll(".letter")
+let gameOver = false
 
-document.addEventListener("keyup", e => {
+document.addEventListener("keyup", function clickedKey(e) {
 
     console.log(e.key)
 
     // checks if the key pressed is alphabetical and if there is room for more letters
-    if (/^[a-zA-Z]$/.test(e.key) && playerGuess.length < 5) {
+    if (/^[a-zA-Z]$/.test(e.key) && playerGuess.length < 5 && !gameOver) {
         playerGuess.push(e.key)
 
         // playerGuess.length - 1 -> index of the next empty space - where to add the  current letter
@@ -103,12 +104,12 @@ document.addEventListener("keyup", e => {
 
     console.log(playerGuess)
 
-    if (e.key === "Backspace" && playerGuess.length > 0) {
+    if (e.key === "Backspace" && playerGuess.length > 0 && !gameOver) {
         playerGuess.pop()
         currGuessLetters[playerGuess.length].innerText = " "
     }
 
-    if (e.key === "Enter" && playerGuess.length == 5) {
+    if (e.key === "Enter" && playerGuess.length == 5 && !gameOver) {
         console.log(`Your guess: ${playerGuess.join("")}`)
         
         let guessTemp = playerGuess.join("").toLowerCase()
@@ -127,9 +128,35 @@ document.addEventListener("keyup", e => {
                 }
             }
 
+            if (secretWord == guessTemp) {
+                gameOver = true
+                endGame()
+            }
+            guessIndex++
+            if (guessIndex == 6) {
+                gameOver = true
+                endGame()
+            }
+            else {
+                currGuess = document.getElementById(`g-${guessIndex}`)
+                currGuessLetters = currGuess.querySelectorAll(".letter")
+                playerGuess = []
+            }
         } else {
             alert(`${playerGuess.join("")} is not in the word list`)
         }
-
     }
 })
+
+
+function endGame() {
+
+    const gameScr = document.getElementById("game")
+    const endScr = document.getElementById("endgame-screen")
+
+    setTimeout(() => {
+        gameScr.style.opacity = 0.5
+        endScr.style.display = 'block'
+    }, 350)
+}
+
