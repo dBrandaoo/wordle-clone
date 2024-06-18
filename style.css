@@ -12,7 +12,7 @@ body {
     font-family: 'Roboto';
 }
 
-nav {
+#header {
     border-bottom: 2px solid #797063;
     font-size: 1.8rem;
     text-align: center;
@@ -103,3 +103,50 @@ nav {
     background-color: #2C3032;
 }
 /* End: Dynamic classes */
+
+
+
+/* Start: Game over screen */
+
+
+
+
+#endgame-screen {
+    border: 3px solid white;
+    background-color: #0E0F10;
+    border-radius: 1rem;
+    width: 420px;
+    position: absolute;
+    top: 120px;
+    height: 700px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 2rem 0;
+
+    display: none;
+}
+
+#end-title {
+    font-size: 2.5rem;
+}
+
+#endgame-screen > button {
+    font-size: 1.5rem;
+    color: white;
+    background: transparent;
+    border: 1px solid white;
+    padding: 0.5rem;
+    transition: 250ms;
+}
+
+#endgame-screen > button:hover,
+#endgame-screen > button:focus {
+    background-color: white;
+    color: black;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: 250ms;
+}
+
+/* End: Game over screen */
