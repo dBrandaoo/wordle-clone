@@ -60,12 +60,16 @@ nav {
 /* End: keyboard */
 
 
-
 /* Start: Guesses */
 .letter {
     width: 70px;
     height: 70px;
     border: 3px solid #797063;
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .game-board {
@@ -81,3 +85,21 @@ nav {
     gap: 0.4rem;
 }
 /* End: Guesses */
+
+
+/* Start: Dynamic classes (color feedback on guesses) */
+/* Word contains letter and is in right position */
+.correct {
+    background-color: #42713E;
+}
+
+/* Word contains letter, wrong position */
+.wrong-place {
+    background-color: #917F2F;
+}
+
+/* Word doesn't contain letter */
+.incorrect {
+    background-color: #2C3032;
+}
+/* End: Dynamic classes */
