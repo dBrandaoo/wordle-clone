@@ -1,3 +1,27 @@
+const wordList = [
+    "apple",
+    "bread",
+    "chalk",
+    "dream",
+    "eagle",
+    "flame",
+    "grace",
+    "honey",
+    "ideal",
+    "joker",
+    "knife",
+    "lemon",
+    "magic",
+    "night",
+    "ocean",
+    "peace",
+    "quiet",
+    "royal",
+    "sweet",
+    "tasty"
+]
+
+
 const keyboardRows = document.querySelectorAll(".keyboard-row")
 
 const kbFirstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
@@ -37,6 +61,7 @@ keyboardRows.forEach(row => {
         const key = document.createElement("div")
         key.classList.add("key", "special-key")
         const backspace = document.createElement("i")
+        // fontawesome class to add the icon
         backspace.classList.add("fa-solid", "fa-delete-left")
         key.appendChild(backspace)
         row.appendChild(key)
@@ -55,3 +80,56 @@ for (let i = 0; i < guesses.length; i++) {
         guesses[i].appendChild(letter)
     }
 }
+
+
+let secretWord = wordList[Math.floor(Math.random() * wordList.length)].toLowerCase()
+
+let guessIndex = 0
+let playerGuess = []
+let currGuess = document.getElementById("g-0")
+let currGuessLetters = currGuess.querySelectorAll(".letter")
+
+document.addEventListener("keyup", e => {
+
+    console.log(e.key)
+
+    // checks if the key pressed is alphabetical and if there is room for more letters
+    if (/^[a-zA-Z]$/.test(e.key) && playerGuess.length < 5) {
+        playerGuess.push(e.key)
+
+        // playerGuess.length - 1 -> index of the next empty space - where to add the  current letter
+        currGuessLetters[playerGuess.length - 1].innerText = e.key.toUpperCase()
+    }
+
+    console.log(playerGuess)
+
+    if (e.key === "Backspace" && playerGuess.length > 0) {
+        playerGuess.pop()
+        currGuessLetters[playerGuess.length].innerText = " "
+    }
+
+    if (e.key === "Enter" && playerGuess.length == 5) {
+        console.log(`Your guess: ${playerGuess.join("")}`)
+        
+        let guessTemp = playerGuess.join("").toLowerCase()
+
+        if (wordList.includes(guessTemp)) {
+            
+            for (let i = 0; i < 5; i++) {
+                if (secretWord.includes(guessTemp[i]) && secretWord[i] == guessTemp[i]) {
+                    currGuessLetters[i].classList.add("correct")
+                }
+                else if (secretWord.includes(guessTemp[i]) && secretWord[i] != guessTemp[i]) {
+                    currGuessLetters[i].classList.add("wrong-place")
+                }
+                else {
+                    currGuessLetters[i].classList.add("incorrect")
+                }
+            }
+
+        } else {
+            alert(`${playerGuess.join("")} is not in the word list`)
+        }
+
+    }
+})
