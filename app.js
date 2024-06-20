@@ -58,12 +58,12 @@ function generateGameBoard() {
                 key.innerText = kbThirdRow[i]
                 row.appendChild(key)
                 if (kbThirdRow[i] === "ENTER") {
-                    key.classList.add("special-key")
+                    key.classList.add("special-key", "enter")
                 }
             }
             // backspace key
             const key = document.createElement("div")
-            key.classList.add("key", "special-key")
+            key.classList.add("key", "special-key", "backspace")
             const backspace = document.createElement("i")
             // fontawesome class to add the icon
             backspace.classList.add("fa-solid", "fa-delete-left")
@@ -88,78 +88,35 @@ function generateGameBoard() {
 
 
 function game() { 
+
+    kbKeys.forEach(key => {
+        if (key.innerText.length === 1) {
+            key.onclick = () => addLetter(key.innerText)
+        }
+        else if (key.classList.contains("enter")) {
+            key.onclick = () => pressedEnter()
+        }
+        else if (key.classList.contains("backspace")) {
+            key.onclick = () => deleteLetter()
+        }
+    });
+
     document.addEventListener("keyup", function clickedKey(e) {
         console.log(e.key)
     
-        // checks if the key pressed is alphabetical and if there is room for more letters
-        if (/^[a-zA-Z]$/.test(e.key) && playerGuess.length < 5 && !gameOver) {
-            playerGuess.push(e.key)
-    
-            // playerGuess.length - 1 -> index of the next empty space - where to add the  current letter
-            currGuessLetters[playerGuess.length - 1].innerText = e.key.toUpperCase()
+        // checks if the key pressed is alphabetical
+        if (/^[a-zA-Z]$/.test(e.key)) {
+            addLetter(e.key.toUpperCase())
         }
     
         console.log(playerGuess)
     
-        if (e.key === "Backspace" && playerGuess.length > 0 && !gameOver) {
-            playerGuess.pop()
-            currGuessLetters[playerGuess.length].innerText = " "
+        if (e.key === "Backspace") {
+            deleteLetter()
         }
     
-        if (e.key === "Enter" && playerGuess.length == 5 && !gameOver) {
-            console.log(`Your guess: ${playerGuess.join("")}`)
-            
-            let guessTemp = playerGuess.join("").toLowerCase()
-    
-            if (wordList.includes(guessTemp)) {  
-                for (let i = 0; i < 5; i++) {
-                    if (secretWord.includes(guessTemp[i]) && secretWord[i] == guessTemp[i]) {
-                        currGuessLetters[i].classList.add("correct")
-                        kbKeys.forEach(key => {
-                            console.log(key)
-                            if (key.innerText === guessTemp[i].toUpperCase()) {
-                                if (key.classList.contains("wrong-place")) {
-                                    key.classList.remove("wrong-place")
-                                }
-                                key.classList.add("correct")
-                            }
-                        })
-                    }
-                    else if (secretWord.includes(guessTemp[i]) && secretWord[i] != guessTemp[i]) {
-                        currGuessLetters[i].classList.add("wrong-place")
-                        kbKeys.forEach(key => {
-                            if (key.innerText === guessTemp[i].toUpperCase()) {
-                                key.classList.add("wrong-place")
-                            }
-                        })
-                    }
-                    else {
-                        currGuessLetters[i].classList.add("incorrect")
-                        kbKeys.forEach(key => {
-                            if (key.innerText === guessTemp[i].toUpperCase()) {
-                                key.classList.add("incorrect")
-                            }
-                        })
-                    }
-                }
-    
-                if (secretWord == guessTemp) {
-                    gameOver = true
-                    endGame()
-                }
-                guessIndex++
-                if (guessIndex == 6) {
-                    gameOver = true
-                    endGame()
-                }
-                else {
-                    currGuess = document.getElementById(`g-${guessIndex}`)
-                    currGuessLetters = currGuess.querySelectorAll(".letter")
-                    playerGuess = []
-                }
-            } else {
-                alert(`${playerGuess.join("")} is not in the word list`)
-            }
+        if (e.key === "Enter") {
+            pressedEnter()
         }
     })
 }
@@ -175,3 +132,77 @@ function endGame() {
     }, 1000)
 }
 
+
+// functions for virtual keyboard
+function addLetter(letter) {
+    console.log(letter)
+    
+    if (playerGuess.length < 5 && !gameOver) {
+        playerGuess.push(letter.toLowerCase())
+        // playerGuess.length - 1 -> index of the next empty space - where to add the  current letter
+        currGuessLetters[playerGuess.length - 1].innerText = letter.toUpperCase()
+    }
+}
+function deleteLetter() {
+    if (playerGuess.length > 0 && !gameOver) {
+        playerGuess.pop()
+        currGuessLetters[playerGuess.length].innerText = " "
+    }
+}
+function pressedEnter() {
+    if (playerGuess.length == 5 && !gameOver) {
+        console.log(`Your guess: ${playerGuess.join("")}`)
+        
+        let guessTemp = playerGuess.join("").toLowerCase()
+
+        if (wordList.includes(guessTemp)) {  
+            for (let i = 0; i < 5; i++) {
+                if (secretWord.includes(guessTemp[i]) && secretWord[i] == guessTemp[i]) {
+                    currGuessLetters[i].classList.add("correct")
+                    kbKeys.forEach(key => {
+                        console.log(key)
+                        if (key.innerText === guessTemp[i].toUpperCase()) {
+                            if (key.classList.contains("wrong-place")) {
+                                key.classList.remove("wrong-place")
+                            }
+                            key.classList.add("correct")
+                        }
+                    })
+                }
+                else if (secretWord.includes(guessTemp[i]) && secretWord[i] != guessTemp[i]) {
+                    currGuessLetters[i].classList.add("wrong-place")
+                    kbKeys.forEach(key => {
+                        if (key.innerText === guessTemp[i].toUpperCase()) {
+                            key.classList.add("wrong-place")
+                        }
+                    })
+                }
+                else {
+                    currGuessLetters[i].classList.add("incorrect")
+                    kbKeys.forEach(key => {
+                        if (key.innerText === guessTemp[i].toUpperCase()) {
+                            key.classList.add("incorrect")
+                        }
+                    })
+                }
+            }
+
+            if (secretWord == guessTemp) {
+                gameOver = true
+                endGame()
+            }
+            guessIndex++
+            if (guessIndex == 6) {
+                gameOver = true
+                endGame()
+            }
+            else {
+                currGuess = document.getElementById(`g-${guessIndex}`)
+                currGuessLetters = currGuess.querySelectorAll(".letter")
+                playerGuess = []
+            }
+        } else {
+            alert(`${playerGuess.join("")} is not in the word list`)
+        }
+    }
+}
