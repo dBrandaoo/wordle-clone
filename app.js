@@ -1,26 +1,3 @@
-// const wordList = [
-//     "apple",
-//     "bread",
-//     "chalk",
-//     "dream",
-//     "eagle",
-//     "flame",
-//     "grace",
-//     "honey",
-//     "ideal",
-//     "joker",
-//     "knife",
-//     "lemon",
-//     "magic",
-//     "night",
-//     "ocean",
-//     "peace",
-//     "quiet",
-//     "royal",
-//     "sweet",
-//     "tasty"
-// ]
-
 // Generation Variables:
 const keyboardRows = document.querySelectorAll(".keyboard-row")
 const kbFirstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"]
@@ -110,9 +87,7 @@ function generateGameBoard() {
 }
 
 
-
-function game() {
-    
+function game() { 
     document.addEventListener("keyup", function clickedKey(e) {
         console.log(e.key)
     
@@ -136,8 +111,7 @@ function game() {
             
             let guessTemp = playerGuess.join("").toLowerCase()
     
-            if (wordList.includes(guessTemp)) {
-                
+            if (wordList.includes(guessTemp)) {  
                 for (let i = 0; i < 5; i++) {
                     if (secretWord.includes(guessTemp[i]) && secretWord[i] == guessTemp[i]) {
                         currGuessLetters[i].classList.add("correct")
@@ -189,6 +163,7 @@ function game() {
         }
     })
 }
+
 
 function endGame() {
     const gameScr = document.getElementById("game")
