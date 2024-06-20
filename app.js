@@ -28,6 +28,8 @@ const kbSecondRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"]
 // missing backspace key, will be added later because it is built in a different way
 const kbThirdRow = ["ENTER", "Z", "X", "C", "V", "B", "N", "M"]
 
+let kbKeys
+
 // Game Variables
 let guessIndex = 0
 let playerGuess = []
@@ -103,12 +105,15 @@ function generateGameBoard() {
             guesses[i].appendChild(letter)
         }
     }
+
+    kbKeys = document.querySelectorAll(".key")
 }
 
 
-function game() {
-    document.addEventListener("keyup", function clickedKey(e) {
 
+function game() {
+    
+    document.addEventListener("keyup", function clickedKey(e) {
         console.log(e.key)
     
         // checks if the key pressed is alphabetical and if there is room for more letters
@@ -136,12 +141,31 @@ function game() {
                 for (let i = 0; i < 5; i++) {
                     if (secretWord.includes(guessTemp[i]) && secretWord[i] == guessTemp[i]) {
                         currGuessLetters[i].classList.add("correct")
+                        kbKeys.forEach(key => {
+                            console.log(key)
+                            if (key.innerText === guessTemp[i].toUpperCase()) {
+                                if (key.classList.contains("wrong-place")) {
+                                    key.classList.remove("wrong-place")
+                                }
+                                key.classList.add("correct")
+                            }
+                        })
                     }
                     else if (secretWord.includes(guessTemp[i]) && secretWord[i] != guessTemp[i]) {
                         currGuessLetters[i].classList.add("wrong-place")
+                        kbKeys.forEach(key => {
+                            if (key.innerText === guessTemp[i].toUpperCase()) {
+                                key.classList.add("wrong-place")
+                            }
+                        })
                     }
                     else {
                         currGuessLetters[i].classList.add("incorrect")
+                        kbKeys.forEach(key => {
+                            if (key.innerText === guessTemp[i].toUpperCase()) {
+                                key.classList.add("incorrect")
+                            }
+                        })
                     }
                 }
     
@@ -173,6 +197,6 @@ function endGame() {
     setTimeout(() => {
         gameScr.style.opacity = 0.5
         endScr.style.display = 'block'
-    }, 350)
+    }, 1000)
 }
 
