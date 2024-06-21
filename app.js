@@ -13,6 +13,7 @@ let playerGuess = []
 let currGuess = document.getElementById(`g-${guessIndex}`)
 let currGuessLetters
 let gameOver = false
+const wordlistAlert = document.getElementById("wordlist-alert")
 
 let secretWord
 
@@ -25,7 +26,6 @@ fetch("data.json")
     .then(json => {
         wordList = json["words"]
         secretWord = wordList[Math.floor(Math.random() * wordList.length)].toLowerCase()
-        console.log("Secret word: ", secretWord)
         generateGameBoard()
         currGuessLetters = currGuess.querySelectorAll(".letter")
         game()
@@ -88,7 +88,6 @@ function generateGameBoard() {
 
 
 function game() { 
-
     kbKeys.forEach(key => {
         if (key.innerText.length === 1) {
             key.onclick = () => addLetter(key.innerText)
@@ -102,14 +101,10 @@ function game() {
     });
 
     document.addEventListener("keyup", function clickedKey(e) {
-        console.log(e.key)
-    
         // checks if the key pressed is alphabetical
         if (/^[a-zA-Z]$/.test(e.key)) {
             addLetter(e.key.toUpperCase())
         }
-    
-        console.log(playerGuess)
     
         if (e.key === "Backspace") {
             deleteLetter()
@@ -147,8 +142,6 @@ function endGame(didWin) {
 
 // functions for virtual keyboard
 function addLetter(letter) {
-    console.log(letter)
-    
     if (playerGuess.length < 5 && !gameOver) {
         playerGuess.push(letter.toLowerCase())
         // playerGuess.length - 1 -> index of the next empty space - where to add the  current letter
@@ -162,17 +155,14 @@ function deleteLetter() {
     }
 }
 function pressedEnter() {
-    if (playerGuess.length == 5 && !gameOver) {
-        console.log(`Your guess: ${playerGuess.join("")}`)
-        
+    if (playerGuess.length == 5 && !gameOver) {        
         let guessTemp = playerGuess.join("").toLowerCase()
 
         if (wordList.includes(guessTemp)) {  
             for (let i = 0; i < 5; i++) {
                 if (secretWord.includes(guessTemp[i]) && secretWord[i] == guessTemp[i]) {
                     currGuessLetters[i].classList.add("correct")
-                    kbKeys.forEach(key => {
-                        console.log(key)
+                    kbKeys.forEach(key => { 
                         if (key.innerText === guessTemp[i].toUpperCase()) {
                             if (key.classList.contains("wrong-place")) {
                                 key.classList.remove("wrong-place")
@@ -214,7 +204,11 @@ function pressedEnter() {
                 playerGuess = []
             }
         } else {
-            alert(`${playerGuess.join("")} is not in the word list`)
+            //alert(`${playerGuess.join("")} is not in the word list`)
+            wordlistAlert.style.visibility = 'visible'
+            setTimeout(() => {
+                wordlistAlert.style.visibility = 'hidden'
+            }, 1200);
         }
     }
 }
