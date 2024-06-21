@@ -47,6 +47,7 @@ body {
 
 .key:hover {
     cursor: pointer;
+    border: 1px solid white;
 }
 
 .key:not(.special-key) {
@@ -107,10 +108,6 @@ body {
 
 
 /* Start: Game over screen */
-
-
-
-
 #endgame-screen {
     border: 3px solid white;
     background-color: #0E0F10;
@@ -123,12 +120,15 @@ body {
     transform: translateX(-50%);
     text-align: center;
     padding: 2rem 0;
-
-    display: none;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 #end-title {
     font-size: 2.5rem;
+    margin-bottom: 0.4rem;
 }
 
 #endgame-screen > button {
@@ -138,6 +138,8 @@ body {
     border: 1px solid white;
     padding: 0.5rem;
     transition: 250ms;
+    width: 35%;
+    margin: 0 auto;
 }
 
 #endgame-screen > button:hover,

@@ -122,13 +122,25 @@ function game() {
 }
 
 
-function endGame() {
+function endGame(didWin) {
     const gameScr = document.getElementById("game")
     const endScr = document.getElementById("endgame-screen")
 
+    const endTitle = document.getElementById("end-title")
+    const wordReveal = document.getElementById("word-reveal")
+
+    if (didWin === "win") {
+        endTitle.innerText = "You win!"
+    }
+    else {
+        endTitle.innerText = "You lose!"
+    }
+
+    wordReveal.innerText = `The word was: ${secretWord}`
+
     setTimeout(() => {
         gameScr.style.opacity = 0.5
-        endScr.style.display = 'block'
+        endScr.style.visibility = 'visible'
     }, 1000)
 }
 
@@ -189,12 +201,12 @@ function pressedEnter() {
 
             if (secretWord == guessTemp) {
                 gameOver = true
-                endGame()
+                endGame("win")
             }
             guessIndex++
             if (guessIndex == 6) {
                 gameOver = true
-                endGame()
+                endGame("lose")
             }
             else {
                 currGuess = document.getElementById(`g-${guessIndex}`)
